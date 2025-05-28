@@ -1452,6 +1452,14 @@ function closeVideoPopup(){
   $("#videoLink").attr('src', '');
 }
 
+//navigation to contributors page
+function navigateToContributors(e,page){
+  e.preventDefault();
+  e.stopPropagation();
+  var _url = basePath + "/contributors.html";
+  window.location.href = _url;
+}
+
 $('#carouselUpdates .carousel-control-prev').click(function() {
   $('#carouselUpdates').carousel('prev');
 });
