@@ -2,8 +2,8 @@
 
 const http = new XMLHttpRequest();
 
-var yumRepo = 'https://repo.fortisoar.fortinet.com/';
-var basePath = 'https://fortisoar.contenthub.fortinet.com/';
+var yumRepo = 'https://repo.secops-content.forticloud.com/';
+var basePath = 'https://fortinet-fortisoar.github.io/contenthub-dev';
 var listItems = [];
 var listItemsBkp;
 var showContentTypeClearFilter = false;
@@ -18,11 +18,12 @@ var paramSortBy = getUrlParameter('sortBy');
 var paramFilterBy = getUrlParameter('filterBy');
 var categoryList = [];
 var publisherList = [];
-var contentTypeList = [{ 'name': 'Connectors', 'value': 'connector' }, { 'name': 'Solution Packs', 'value': 'solutionpack' }, { 'name': 'Widgets', 'value': 'widget' }, { 'name': 'Resources', 'value': 'resources' }];
+var contentTypeList = [{ 'name': 'Connectors', 'value': 'connector' }, { 'name': 'Solution Packs', 'value': 'solutionpack' }, { 'name': 'Widgets', 'value': 'widget' }, { 'name': 'Agents', 'value': 'ai_agent' }, { 'name': 'Resources', 'value': 'resources' }];
 var contentSubTypeList = [{ 'name': 'FortiSOAR Kit', 'value': 'datasheet'}, {'name': 'Demo Videos', 'value': 'demovideos'}, {'name': 'Product How To\'s', 'value': 'howtos'}];
 var totalItems = 0;
 
 $(document).ready(function () {
+
   //Top nav bar
   var topbar = $('#topbar-container');
   if (topbar) {
@@ -52,6 +53,26 @@ $(document).ready(function () {
     $('.custom-search-alert').addClass('d-none');
     $('.content-count-sort-container .global-search-input-sm').removeClass('w-25');
   }
+
+  // Quick Overview Tab switching - using event delegation on parent
+  $(document).on('click', '.content-type-nav a', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var contentType = $(this).attr('data-content-type');
+    switchQuickOverviewTab(contentType);
+    // Update active state
+    $('.content-type-nav a').removeClass('active');
+    $(this).addClass('active');
+    // Update title based on selected content type
+    var titleMap = {
+      'solutionpack': 'Find Solution Packs | in Seconds',
+      'connector': 'Find Connectors | in Seconds',
+      'widget': 'Find Widgets | in Seconds',
+      'ai_agent': 'Find Agents | in Seconds'
+    };
+    var titleText = titleMap[contentType] || 'Find Solution Packs | in Seconds';
+    $('.content-list-quick-overview-title h3').text(titleText);
+  });
 });
 
 function reloadURLParams(){
@@ -68,14 +89,18 @@ function loadSidebar(){
   //Sidebar on listing page
   if (navBar && navBar.length > 0) {
     var xmlHttp = new XMLHttpRequest();
-    navBar.load('assets/html/sidebar.html');
+    navBar.load('assets/html/sidebar.html', function() {
+      // Move toggle button outside sidebar for tablet view
+      var toggleBtn = $('#sidebar-toggle-btn');
+      if (toggleBtn.length > 0) {
+        toggleBtn.detach().appendTo('body');
+      }
+    });
 
     //Check headers last modified date
     var contentHubFilterJsonPath = yumRepo + "content-hub/content-hub-filters.json";
     var allFiltersJson = localStorageGetSetItem('get', 'allFiltersJson');
     httpGetHeaderInfo(contentHubFilterJsonPath, function(lastModifiedDate) {
-      console.log(lastModifiedDate);
-
       if (!localStorage.hasOwnProperty('filterJsonlastModifiedDate')) {
         localStorageGetSetItem('set', 'filterJsonlastModifiedDate', lastModifiedDate);
       }
@@ -113,7 +138,7 @@ function loadSidebar(){
 
 function buildFilterList(type, filter, match) {
   reloadURLParams();
-  var emptyTextElement = createNewDomElement('p', 'font-size-sm text-light');
+  var emptyTextElement = createNewDomElement('p', 'font-size-sm theme-text');
   var emptyResultText = document.createTextNode('No Result Found');
   emptyTextElement.append(emptyResultText);
   var emptyContentType = true;
@@ -430,7 +455,6 @@ function init() {
     var resourcesJson = resourcesJson.resources;
     //Check headers last modified date
     httpGetHeaderInfo(contentHubPath, function(lastModifiedDate) {
-      console.log(lastModifiedDate);
       if (!localStorage.hasOwnProperty('allItemsJsonlastModifiedDate')) {
         localStorageGetSetItem('set', 'allItemsJsonlastModifiedDate', lastModifiedDate);
       }
@@ -488,8 +512,53 @@ function updateContentOnPageLoad(allItemsJson){
     setTimeout(function () {
       buildUpdatesAvailableList(updatesList);
       buildFeaturedAvailableList(listItems);
+      buildQuickOverviewTiles(listItems);
     }, 100);
     buildHomePageBanners();
+
+    // Build reviews section from mainBanner data
+    var reviewsContent = $("#reviews-content");
+    var bannersJson = $.getJSON({ 'url': "assets/banners.json", 'async': false });
+    bannersJson = JSON.parse(bannersJson.responseText);
+    _.each(bannersJson.mainBanner, function (banner) {
+      var cardWrapper = createNewDomElement('div', 'review-card-wrapper');
+      var card = createNewDomElement('a', 'review-card');
+      card.href = banner.hyperLink.match(/https:/gi) ? banner.hyperLink : basePath + banner.hyperLink;
+      card.setAttribute("target", "_blank");
+      card.setAttribute("rel", "canonical");
+
+      // Image placeholder (130x130)
+      var cardImage = createNewDomElement('div', 'review-card-image');
+      var placeholderImg = createNewDomElement('img', '');
+      placeholderImg.src = 'assets/images/icon_large.png';
+      placeholderImg.alt = 'Content thumbnail';
+      cardImage.appendChild(placeholderImg);
+      card.appendChild(cardImage);
+
+      // Content wrapper
+      var cardContent = createNewDomElement('div', 'review-card-content');
+
+      // Title
+      var cardTitle = createNewDomElement('h5', 'review-card-title');
+      cardTitle.appendChild(document.createTextNode(banner.heading));
+      cardContent.appendChild(cardTitle);
+
+      // Subtitle/Description
+      var cardSubtitle = createNewDomElement('p', 'review-card-subtitle');
+      cardSubtitle.appendChild(document.createTextNode(banner.subHeading));
+      cardContent.appendChild(cardSubtitle);
+
+      // Link below subtitle
+      if (banner.hyperLinkText) {
+        var cardLink = createNewDomElement('span', 'review-card-link');
+        cardLink.innerHTML = banner.hyperLinkText + ' <i class="fa fa-arrow-right"></i>';
+        cardContent.appendChild(cardLink);
+      }
+
+      card.appendChild(cardContent);
+      cardWrapper.appendChild(card);
+      reviewsContent.append(cardWrapper);
+    });
   }
   if (window.location.href.indexOf('list.html') > -1) {
     setTimeout(function () {
@@ -503,8 +572,6 @@ function updateContentOnPageLoad(allItemsJson){
       $('.main-page-content').removeClass('d-none');
       mainPageLoader.addClass('d-none');
     }, 500);
-    $('#carouselMain').carousel({ interval: 5000 });
-    $('#carouselProductUpdates').carousel({ interval: false });
     $('#carouselUpdates').carousel({ interval: false });
     $('#carouselFeaturedUpdates').carousel({ interval: false });
   }
@@ -535,7 +602,7 @@ function applyFilter(item, value, filterType, from, e) {
   var categoryParams;
   var publisherParams;
 
-  if (item.checked || item.className === 'nav-link' || item.className === 'nav-link text-light header-content-nav-link' || item.className === 'dropdown-item') {
+  if (item.checked || item.className === 'nav-link' || item.className === 'nav-link theme-text header-content-nav-link' || item.className === 'dropdown-item') {
     if (filterType === 'contentType') {
       contentTypeParams = updateFilterParams(paramContentType, value, 'add', 'contentType');
       categoryParams = paramCategory;
@@ -662,11 +729,11 @@ function updateHeaderContentTypeLinks(value, from) {
   var headerContentNavLink = $('.header-content-nav-link');
   _.each(headerContentNavLink, function (navLink) {
     if(navLink.className === 'nav-link header-content-nav-link active'){
-      navLink.className = 'nav-link text-light header-content-nav-link';
+      navLink.className = 'nav-link theme-text header-content-nav-link';
     }
   });
   if(from === 'header' && value !== 'howtos' && value !== 'datasheet' && value !== 'demovideos'){
-    $('#' + value + '-header-nav-link').removeClass('text-light');
+    $('#' + value + '-header-nav-link').removeClass('theme-text');
     $('#' + value + '-header-nav-link').addClass('active');
   }
 }
@@ -852,190 +919,83 @@ function getSearchFilteredData(match, allListItems, type) {
 }
 
 function buildHomePageBanners() {
-  var mainBanner = $("#main-carousel-content");
-  var announcementsBanner = $("#carousel-announcement-content");
-  var updatesBanner = $("#carousel-product-updates-content");
-  var mainBannerIndicator = $("#main-carousel-indicators");
+  var updatesContent = $("#carousel-product-updates-content");
+  var tabsNav = $("#product-updates-tabs-nav");
   var bannersJson = $.getJSON({ 'url': "assets/banners.json", 'async': false });
   bannersJson = JSON.parse(bannersJson.responseText);
 
-  //Announcement banner
-  _.each(bannersJson.announcementBanner, function (announcementBanner, index) {
+  //Updates banner - tabs structure
+  if(bannersJson.updatesBanner && bannersJson.updatesBanner.length > 0){
+    _.each(bannersJson.updatesBanner, function (updateBanner, index) {
+      var isActive = index === 0;
+      var tabId = "product-update-tab-" + index;
+      var contentId = "product-update-content-" + index;
 
-    var announcementCarouselDiv = createNewDomElement('div', index === 0 ? "carousel-item active text-light" : "carousel-item text-light");
+      // Create tab button
+      var tabButton = createNewDomElement('button', isActive ? "product-update-tab-btn active" : "product-update-tab-btn");
+      tabButton.setAttribute("type", "button");
+      tabButton.setAttribute("role", "tab");
+      tabButton.setAttribute("aria-selected", isActive ? "true" : "false");
+      tabButton.setAttribute("data-tab-index", index);
+      tabButton.setAttribute("data-target", contentId);
 
-    var announcementCarouselRow = createNewDomElement('div', 'row');
-    announcementCarouselDiv.appendChild(announcementCarouselRow);
+      // Tab title (using heading)
+      var tabTitle = createNewDomElement('span', 'tab-title');
+      var tabTitleText = document.createTextNode(updateBanner.heading);
+      tabTitle.appendChild(tabTitleText);
 
-    var announcementCarouselColumn = createNewDomElement('div', '');
-    announcementCarouselRow.appendChild(announcementCarouselColumn);
+      // Tab subtitle (using description)
+      var tabSubtitle = createNewDomElement('span', 'tab-subtitle');
+      var tabSubtitleText = document.createTextNode(updateBanner.description);
+      tabSubtitle.appendChild(tabSubtitleText);
 
-    var announcementContent = createNewDomElement('div', 'd-flex justify-content-center mb-1 mt-1');
+      // View Details link
+      var detailsLink = createNewDomElement('a', 'btn btn-sm default-btn-bg mt-2');
+      detailsLink.href = updateBanner.hyperLink;
+      detailsLink.setAttribute("target", "_blank");
+      detailsLink.setAttribute("rel", "canonical");
+      var linkText = document.createTextNode('View Details');
+      detailsLink.appendChild(linkText);
 
-    var announcementHeading = createNewDomElement('h6', 'lh-base mb-0 me-1');
-    announcementContent.appendChild(announcementHeading);
+      // Prevent tab switch when clicking on the link
+      $(detailsLink).on('click', function(e) {
+        e.stopPropagation();
+      });
 
-    var announcementHeadingText = document.createTextNode(announcementBanner.heading + ':');
-    announcementHeading.appendChild(announcementHeadingText);
+      tabButton.appendChild(tabTitle);
+      tabButton.appendChild(tabSubtitle);
+      tabButton.appendChild(detailsLink);
+      tabsNav.append(tabButton);
 
-    var announcementSubHeading = createNewDomElement('p', 'fw-light mb-0 me-3');
-    announcementContent.appendChild(announcementSubHeading);
+      // Create tab content
+      var tabContent = createNewDomElement('div', isActive ? "product-update-content tab-pane fade show active" : "product-update-content tab-pane fade");
+      tabContent.setAttribute("id", contentId);
+      tabContent.setAttribute("role", "tabpanel");
 
-    var announcementSubHeadingText = document.createTextNode(announcementBanner.subHeading);
-    announcementSubHeading.appendChild(announcementSubHeadingText);
+      var contentInner = createNewDomElement('div', 'product-update-content-inner');
 
-    var announcementHyperLink = createNewDomElement('a', 'pull-left text-center btn-link');
-    announcementHyperLink.href = announcementBanner.hyperLink;
-    announcementHyperLink.setAttribute("target", "_blank");
-    announcementHyperLink.setAttribute("rel", "canonical");
-    var announcementHyperLinkText = document.createTextNode(announcementBanner.hyperLinkText);
-    announcementHyperLink.appendChild(announcementHyperLinkText);
-    announcementContent.appendChild(announcementHyperLink);
+      // Image - full width
+      var contentImage = createNewDomElement('div', 'product-update-image');
+      contentImage.style.backgroundImage = "url(" + updateBanner.imagePath + ")";
 
-    announcementCarouselColumn.appendChild(announcementContent);
+      contentInner.appendChild(contentImage);
+      tabContent.appendChild(contentInner);
+      updatesContent.append(tabContent);
 
-    announcementsBanner.append(announcementCarouselDiv);
-  });
+      // Add click event for tab switching
+      $(tabButton).on('click', function() {
+        var targetId = $(this).attr('data-target');
 
-  //Main Banner
-  _.each(bannersJson.mainBanner, function (banner, index) {
-    var carouselIndicatorButton = createNewDomElement('button', index === 0 ? "active" : "");
-    var carouselId = "carouselMainCaptions" + index;
-    carouselIndicatorButton.setAttribute("type", "button");
-    carouselIndicatorButton.setAttribute("data-bs-target", "#carouselMain");
-    carouselIndicatorButton.setAttribute("data-bs-slide-to", index);
-    carouselIndicatorButton.setAttribute("aria-label", banner.heading);
+        // Remove active class from all tabs
+        tabsNav.find('.product-update-tab-btn').removeClass('active');
+        $(this).addClass('active');
 
-    mainBannerIndicator.append(carouselIndicatorButton);
-
-    var carouselDiv = createNewDomElement('div', index === 0 ? "carousel-item active" : "carousel-item");
-
-    var carouselContainer = createNewDomElement('div', 'custom-left-offset-1 custom-right-offset-1');
-    carouselDiv.appendChild(carouselContainer);
-
-    var carouselRow = createNewDomElement('div', 'row');
-    carouselRow.setAttribute("id", carouselId);
-    carouselContainer.appendChild(carouselRow);
-
-    var carouselColumn = createNewDomElement('div', 'col-auto carousel-col');
-    carouselRow.appendChild(carouselColumn);
-
-    var carouselHeading = createNewDomElement('h1', 'text-light fs-2');
-    carouselColumn.appendChild(carouselHeading);
-
-    var carouselHeadingText = document.createTextNode(banner.heading);
-    carouselHeading.appendChild(carouselHeadingText);
-
-    var carouselSubHeading = createNewDomElement('p', 'text-light fs-6');
-    carouselColumn.appendChild(carouselSubHeading);
-
-    var carouselSubHeadingText = document.createTextNode(banner.subHeading);
-    carouselSubHeading.appendChild(carouselSubHeadingText);
-
-    var carouselHyperLink = createNewDomElement('a', 'pull-left text-center btn btn-md');
-    carouselHyperLink.href = banner.hyperLink.match(/https:/gi) ? banner.hyperLink : basePath + banner.hyperLink;
-    carouselHyperLink.setAttribute("target", "_blank");
-    carouselHyperLink.setAttribute("rel", "canonical");
-    var carouselHyperLinkText = document.createTextNode(banner.hyperLinkText);
-    carouselHyperLink.appendChild(carouselHyperLinkText);
-    carouselColumn.appendChild(carouselHyperLink);
-
-    mainBanner.append(carouselDiv);
-  });
-
-  //Updates banner
-  var updatesCarouselCards = [];
-  var updatesCarouselDiv;
-  var updatesItemIndex = 0;
-  var updatesCarouselIndex = 0;
-
-  if(bannersJson.updatesBanner && bannersJson.updatesBanner.length <= 4 && $(window).width() > 450){
-    $('#product-carousel-indicators').addClass('d-none');
+        // Hide all content and show target
+        updatesContent.find('.product-update-content').removeClass('show active');
+        $('#' + targetId).addClass('show active');
+      });
+    });
   }
-  _.each(bannersJson.updatesBanner, function (updateBanner) {
-
-    var updateBannerCard = buildProductUpdatesCard(updateBanner);
-    updatesCarouselCards.push(updateBannerCard);
-    updatesItemIndex = updatesItemIndex + 1;
-    if ($(window).width() <= 450) {
-      updatesCarouselDiv = buildProductUpdatesCarousel(updatesCarouselCards, updatesCarouselIndex);
-      updatesBanner.append(updatesCarouselDiv);
-      updatesCarouselIndex = updatesCarouselIndex + 1;
-      updatesCarouselCards = [];
-    } else {
-      if((bannersJson.updatesBanner.length < 4 && updatesItemIndex === bannersJson.updatesBanner.length) || (updatesCarouselIndex === 0 && updatesItemIndex === 4) || ((((updatesItemIndex/4) - 1) === updatesCarouselIndex)) || (bannersJson.updatesBanner.length === updatesItemIndex)) {
-        updatesCarouselDiv = buildProductUpdatesCarousel(updatesCarouselCards, updatesCarouselIndex);
-        updatesBanner.append(updatesCarouselDiv);
-        updatesCarouselIndex = updatesCarouselIndex + 1;
-        updatesCarouselCards = [];
-      }
-    }
-  });
-}
-
-function buildProductUpdatesCard(updateBanner){
-
-  var carouselBlock = createNewDomElement('div', 'col-md-3');
-
-  var carouselHyperLink = createNewDomElement('a', 'text-decoration-none text-light');
-  carouselHyperLink.href = updateBanner.hyperLink;
-  carouselHyperLink.setAttribute("target", "_blank");
-  carouselHyperLink.setAttribute("rel", "canonical");
-  carouselBlock.appendChild(carouselHyperLink);
-
-  var itemIconDiv = createNewDomElement('div', 'item-image');
-  itemIconDiv.style.backgroundImage = "url(" + updateBanner.imagePath + ")";
-  carouselHyperLink.appendChild(itemIconDiv);
-
-  var carouselContent = createNewDomElement('div', 'update-item-details');
-
-  var carouselSubHeading = createNewDomElement('h6', 'fw-light');
-  carouselContent.appendChild(carouselSubHeading);
-
-  var carouselSubHeadingText = document.createTextNode(updateBanner.subHeading);
-  carouselSubHeading.appendChild(carouselSubHeadingText);
-
-  var carouselHeading = createNewDomElement('h3');
-  carouselHeading.setAttribute("title", updateBanner.heading);
-  carouselContent.appendChild(carouselHeading);
-
-  var carouselHeadingText = document.createTextNode(updateBanner.heading);
-  carouselHeading.appendChild(carouselHeadingText);
-
-  var carouselDescription = createNewDomElement('p');
-  carouselDescription.setAttribute("title", updateBanner.description);
-  carouselContent.appendChild(carouselDescription);
-
-  var carouselDescriptionText = document.createTextNode(updateBanner.description);
-  carouselDescription.appendChild(carouselDescriptionText);
-
-  carouselHyperLink.appendChild(carouselContent);
-
-  return carouselBlock;
-}
-
-function buildProductUpdatesCarousel(updateBannerCards, index) {
-  var mainBannerIndicator = $("#product-carousel-indicators");
-  var carouselIndicatorButton = createNewDomElement('button', index === 0 ? "active" : "");
-  var carouselId = "carouselProductUpdates" + index;
-  carouselIndicatorButton.setAttribute("type", "button");
-  carouselIndicatorButton.setAttribute("data-bs-target", "#carouselProductUpdates");
-  carouselIndicatorButton.setAttribute("data-bs-slide-to", index);
-  carouselIndicatorButton.setAttribute("aria-label", "Product Updates Section" + index);
-
-  mainBannerIndicator.append(carouselIndicatorButton);
-
-  var carouselDiv = createNewDomElement('div', index === 0 ? "carousel-item active" : "carousel-item");
-
-  var carouselRow = createNewDomElement('div', 'row');
-  carouselRow.setAttribute("id", carouselId);
-  carouselDiv.appendChild(carouselRow);
-
-  _.each(updateBannerCards, function (updateBannerCard) {
-    carouselRow.append(updateBannerCard);
-  });
-
-  return carouselDiv;
 }
 
 function buildUpdatesAvailableList(listData) {
@@ -1056,7 +1016,7 @@ function buildUpdatesAvailableList(listData) {
       carouselIndex = carouselIndex + 1;
       carouselCards = [];
     } else {
-      if((listData.length < 6 && itemIndex === listData.length) || (carouselIndex === 0 && itemIndex === 6) || (carouselIndex === 1 && itemIndex <= 12 && itemIndex > 6 && itemIndex === (listData.length - 6)) || (carouselIndex === 2 && itemIndex <= 18 && itemIndex > 12  && itemIndex === listData.length)) {
+      if(carouselCards.length === 4 || itemIndex === listData.length) {
         carouselDiv = buildUpdatesCarousel(carouselCards, carouselIndex, "carouselUpdates", "latest-updates-carousel-indicators");
         marketPlaceUpdates.append(carouselDiv);
         carouselIndex = carouselIndex + 1;
@@ -1079,22 +1039,20 @@ function buildFeaturedAvailableList(listData) {
   });
 
   if(featuredAllItems && featuredAllItems.length < 4 && $(window).width() > 450){
-    $('#carouselFeaturedUpdates .carousel-control-prev').addClass('d-none');
-    $('#carouselFeaturedUpdates .carousel-control-next').addClass('d-none');
     $('#featured-updates-carousel-indicators').addClass('d-none');
   }
   _.each(featuredAllItems, function (listItem) {
-    var mpCard = buildCardHtml(listItem, 'updates');
+    var mpCard = buildCardHtml(listItem, 'featured');
     carouselCards.push(mpCard);
     itemIndex = itemIndex + 1;
-    
+
     if ($(window).width() <= 450) {
       carouselDiv = buildUpdatesCarousel(carouselCards, carouselIndex, "carouselFeaturedUpdates", "featured-updates-carousel-indicators");
       marketPlaceUpdates.append(carouselDiv);
       carouselIndex = carouselIndex + 1;
       carouselCards = [];
     } else {
-      if((featuredAllItems.length < 3 && itemIndex === featuredAllItems.length) || (carouselIndex === 0 && itemIndex === 3) || (carouselIndex === 1 && itemIndex <= 6 && itemIndex > 3 && itemIndex === (featuredAllItems.length - 3)) || (carouselIndex === 2 && itemIndex <= 9 && itemIndex > 6  && itemIndex === featuredAllItems.length)) {
+      if(carouselCards.length === 3 || itemIndex === featuredAllItems.length) {
         carouselDiv = buildUpdatesCarousel(carouselCards, carouselIndex, "carouselFeaturedUpdates", "featured-updates-carousel-indicators");
         marketPlaceUpdates.append(carouselDiv);
         carouselIndex = carouselIndex + 1;
@@ -1117,7 +1075,7 @@ function buildUpdatesCarousel(mpCards, index, targetID, carouselID){
 
   var carouselDiv = createNewDomElement('div', index === 0 ? "carousel-item active" : "carousel-item");
 
-  var carouselRow = createNewDomElement('div', 'row');
+  var carouselRow = createNewDomElement('div', targetID === 'carouselUpdates' ? 'd-flex flex-wrap justify-content-center' : 'd-flex flex-wrap align-items-start justify-content-center');
   carouselRow.setAttribute("id", latestUpdatesId);
   carouselDiv.appendChild(carouselRow);
 
@@ -1141,7 +1099,7 @@ function buildListData(listData, updateTotalCount) {
   }
   $("#filteredContentCount").html(listData.length);
   if(listData.length === 0){
-    var noResultDiv = createNewDomElement('div', 'h-100 m-5 mp-content-no-results text-center text-light muted');
+    var noResultDiv = createNewDomElement('div', 'h-100 m-5 mp-content-no-results text-center theme-text muted');
     var noResultTitle = createNewDomElement('h4', 'mp-tile-title fw-lighter');
     var noResultText = document.createTextNode('No Results Found');
     noResultTitle.appendChild(noResultText);
@@ -1152,16 +1110,14 @@ function buildListData(listData, updateTotalCount) {
     contentCountElement.removeClass('d-none');
   }
   _.each(listData, function (listItem) {
-    var mpCard = buildCardHtml(listItem);
+    var mpCard = buildCardHtml(listItem, 'marketplace');
     marketPlace.append(mpCard);
   });
 }
 
 function buildCardHtml(listItem, mode) {
-  if(mode === 'updates') {
-    var divColTaglistItem = createNewDomElement('div', 'col-md-4 col-sm-6');
+  if(mode === 'updates' || mode === 'featured' || mode === 'quick-overview' || mode === 'marketplace') {
     var divTaglistItem = createNewDomElement('div', "mp-tile-container mp-tile-" + listItem.type + "-container");
-    divColTaglistItem.appendChild(divTaglistItem);
   }
 
   var aTaglistItem = createNewDomElement('a');
@@ -1181,27 +1137,44 @@ function buildCardHtml(listItem, mode) {
   } else {
     aTaglistItem.href = basePath + "/detail.html?entity=" + entityName + "&version=" + listItem.version + "&type=" + listItem.type;
   }
-  aTaglistItem.className = mode === 'updates' ? "text-light text-decoration-none" : "text-light mp-tile-container mp-tile-" + listItem.type + "-container";
+
+  aTaglistItem.className = "theme-text text-decoration-none";
   aTaglistItem.setAttribute("title", listItem.label);
 
-  if(mode === 'updates') {
-    var itemIconSpan = createNewDomElement('span', 'mp-content-type-icon pull-left');
+  // Show type icon and text for updates and featured modes (but not the featured badge)
+  if(mode === 'updates' || mode === 'featured' || mode === 'quick-overview' || mode === 'marketplace') {
+    var contentTypeWrapper = createNewDomElement('div', 'mp-content-type-wrapper');
+
+    var itemIconSpan = createNewDomElement('span', 'mp-content-type-icon');
     var itemIcon = createNewDomElement('i', "icon-" + listItem.type + "-type icon");
     itemIconSpan.appendChild(itemIcon);
-    aTaglistItem.appendChild(itemIconSpan);
+
+    var itemType = createNewDomElement('span', 'mp-content-type');
+    var itemTypeText = document.createTextNode(listItem.type === 'solutionpack' ? 'Solution Pack' : listItem.type === 'howtos' ? 'Product How To\'s' : listItem.type === 'demovideos' ? 'Demo Videos' : listItem.type === 'datasheet' ? 'FortiSOAR Kit' : listItem.type === 'ai_agent' ? 'AI Agent' : listItem.type);
+    itemType.appendChild(itemTypeText);
+
+    contentTypeWrapper.appendChild(itemIconSpan);
+    contentTypeWrapper.appendChild(itemType);
+    aTaglistItem.appendChild(contentTypeWrapper);
   }
 
-  var itemType = createNewDomElement('p', 'mp-content-type');
-  var itemTypeText = document.createTextNode(listItem.type === 'solutionpack' ? 'Solution Pack' : listItem.type === 'howtos' ? 'Product How To\'s' : listItem.type === 'demovideos' ? 'Demo Videos' : listItem.type === 'datasheet' ? 'FortiSOAR Kit' : listItem.type);
-  itemType.appendChild(itemTypeText);
-  aTaglistItem.appendChild(itemType);
-
-  if(mode !== 'updates') {
+  // Show badge for marketplace-list mode (not updates or featured modes)
+  if(!mode || mode === 'marketplace') {
     if(listItem.certified){
       var itemCertified = createNewDomElement('i', 'icon-featured-badge position-absolute text-success top-position-10 right-position-10');
       itemCertified.setAttribute("title", "Certified");
       aTaglistItem.appendChild(itemCertified);
     }
+  }
+
+  // For marketplace, updates, featured, and quick-overview mode, create a flex row wrapper for image and title side by side
+  var imageTitleRow;
+  if(mode === 'marketplace' || mode === 'updates' || mode === 'featured' || mode === 'quick-overview') {
+    imageTitleRow = createNewDomElement('div', 'd-flex flex-row align-items-start mt-2');
+  }
+
+  // Show image container for marketplace-list mode, updates mode, and quick-overview (not featured modes)
+  if(!mode || mode === 'marketplace' || mode === 'updates' || mode === 'quick-overview') {
     var itemIconDiv = createNewDomElement('div', 'mp-tile-image-container');
 
     var imageElement;
@@ -1220,20 +1193,38 @@ function buildCardHtml(listItem, mode) {
     }
 
     itemIconDiv.appendChild(imageElement);
-    aTaglistItem.appendChild(itemIconDiv);
+    if(mode === 'marketplace' || mode === 'updates' || mode === 'featured' || mode === 'quick-overview') {
+      imageTitleRow.appendChild(itemIconDiv);
+    } else {
+      aTaglistItem.appendChild(itemIconDiv);
+    }
   }
 
-  var itemContentDiv = createNewDomElement('div', 'mp-content-fixed-height');
+  var itemContentDiv = createNewDomElement('div', 'mp-content-fixed-height mt-3');
 
   var itemTitle = createNewDomElement('h4', 'mp-tile-title');
   var itemTitleText = document.createTextNode(listItem.label || listItem.display);
   itemTitle.appendChild(itemTitleText);
-  itemContentDiv.appendChild(itemTitle);
+  if(mode === 'marketplace' || mode === 'updates' || mode === 'featured' || mode === 'quick-overview') {
+    imageTitleRow.appendChild(itemTitle);
+  } else {
+    itemContentDiv.appendChild(itemTitle);
+  }
+
+  if(mode === 'featured') {
+    var cardDescriptionClass = 'mp-tile-description muted-80 mp-tile-description-featured';
+    var cardDescription = createNewDomElement('p', cardDescriptionClass);
+    listItem.description = listItem.description ? listItem.description : '';
+    var tooltipDesc = listItem.description.replace(/(<([^>]+)>)/gi, "");
+    cardDescription.setAttribute("title", tooltipDesc);
+    cardDescription.innerHTML = listItem.description;
+    itemContentDiv.appendChild(cardDescription);
+  }
 
   var itemDetailsDiv = createNewDomElement('div', 'mp-tile-details');
 
   var itemVersion = createNewDomElement('p', 'm-0');
-  var itemVersionTag = document.createElement('span');
+  var itemVersionTag = createNewDomElement('span', 'muted');
   if(listItem.type === 'howtos' || listItem.type === 'datasheet' || listItem.type === 'demovideos'){
     var itemTypeTagText = document.createTextNode("Type: ");
     itemVersionTag.appendChild(itemTypeTagText);
@@ -1251,7 +1242,7 @@ function buildCardHtml(listItem, mode) {
 
   if(listItem.publisher){
     var itemPublisher = createNewDomElement('p', 'm-0');
-    var itemPublisherTag = document.createElement('span');
+    var itemPublisherTag = createNewDomElement('span', 'muted');
     var itemPublisherTagText = document.createTextNode("Published By: ");
     itemPublisherTag.appendChild(itemPublisherTagText);
     itemPublisher.appendChild(itemPublisherTag);
@@ -1259,25 +1250,37 @@ function buildCardHtml(listItem, mode) {
     itemPublisher.appendChild(itemPublisherText);
     itemDetailsDiv.appendChild(itemPublisher);
   }
-  
+
   itemContentDiv.appendChild(itemDetailsDiv);
+
+  if(mode === 'marketplace' || mode === 'updates' || mode === 'featured' || mode === 'quick-overview') {
+    aTaglistItem.appendChild(imageTitleRow);
+  }
   aTaglistItem.appendChild(itemContentDiv);
 
-  var cardDescription = createNewDomElement('p', 'mp-tile-description muted-80');
-  listItem.description = listItem.description ? listItem.description : '';
-  var tooltipDesc = listItem.description.replace(/(<([^>]+)>)/gi, "");
-  cardDescription.setAttribute("title", tooltipDesc);
-  cardDescription.innerHTML = listItem.description;
-  aTaglistItem.appendChild(cardDescription);
+  if(mode === 'updates' || mode === 'quick-overview' || mode === 'marketplace') {
+    var cardDescriptionClass = 'mp-tile-description muted-80';
+    var cardDescription = createNewDomElement('p', cardDescriptionClass);
+    listItem.description = listItem.description ? listItem.description : '';
+    var tooltipDesc = listItem.description.replace(/(<([^>]+)>)/gi, "");
+    cardDescription.setAttribute("title", tooltipDesc);
+    cardDescription.innerHTML = listItem.description;
+    aTaglistItem.appendChild(cardDescription);
+  }
 
-  if(mode === 'updates'){
-    var itemButton = createNewDomElement('button', 'btn btn-outline-light mt-3');
-    var itemButtonText = document.createTextNode("Learn More");
+  if(mode === 'featured'){
+    var itemButton = createNewDomElement('button', 'btn default-btn-bg btn-sm mt-3 view-all-apps-btn');
+    var itemButtonText = document.createTextNode("View Details");
     itemButton.appendChild(itemButtonText);
     aTaglistItem.appendChild(itemButton);
     divTaglistItem.appendChild(aTaglistItem);
-    return divColTaglistItem;
-  } else {
+    return divTaglistItem;
+  }
+  else if(mode === 'updates' || mode === 'quick-overview' || mode === 'marketplace') {
+    divTaglistItem.appendChild(aTaglistItem);
+    return divTaglistItem;
+  }
+  else {
     return aTaglistItem;
   }
 }
@@ -1292,6 +1295,42 @@ function toggleFilter(e) {
     event.addClass('active');
     $('.sidebar').removeClass('d-none');
     $('body').addClass('overflow-hidden');
+  }
+}
+
+function closeSidebarMobile() {
+  // Close sidebar on mobile and reset the filter button
+  $('.sidebar').addClass('d-none');
+  $('body').removeClass('overflow-hidden');
+  $('.mobile-view-filter-btn .filter-btn').removeClass('active');
+}
+
+function toggleSidebarCollapse() {
+  var sidebar = $('#sidebar');
+  var sidebarContent = $('.sidebar .sidebar-content');
+  var toggleBtn = $('#sidebar-toggle-btn i');
+  var isTablet = window.innerWidth >= 768 && window.innerWidth <= 991;
+
+  if (isTablet) {
+    // Toggle sidebar show/hide in tablet view
+    if (sidebar.hasClass('show')) {
+      sidebar.removeClass('show');
+      toggleBtn.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+    } else {
+      sidebar.addClass('show');
+      toggleBtn.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    }
+  } else {
+    // Desktop view - toggle sidebar content collapse
+    if (sidebarContent.hasClass('collapsed')) {
+      sidebarContent.removeClass('collapsed');
+      sidebarContent.css('max-height', 'calc(100vh - 200px)');
+      toggleBtn.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+    } else {
+      sidebarContent.addClass('collapsed');
+      sidebarContent.css('max-height', '50px');
+      toggleBtn.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    }
   }
 }
 
@@ -1452,7 +1491,6 @@ function closeVideoPopup(){
   $("#videoLink").attr('src', '');
 }
 
-//navigation to contributors page
 function navigateToContributors(e,page){
   e.preventDefault();
   e.stopPropagation();
@@ -1460,19 +1498,47 @@ function navigateToContributors(e,page){
   window.location.href = _url;
 }
 
-$('#carouselUpdates .carousel-control-prev').click(function() {
-  $('#carouselUpdates').carousel('prev');
-});
+function switchQuickOverviewTab(contentType) {
+  // Update tab content - hide all, show selected
+  var tabContents = document.querySelectorAll('.quick-overview-tiles');
+  tabContents.forEach(function(content) {
+    content.classList.add('d-none');
+  });
+  var activeContent = document.getElementById('quick-overview-' + contentType);
+  if (activeContent) {
+    activeContent.classList.remove('d-none');
+  }
 
-$('#carouselUpdates .carousel-control-next').click(function() {
-  $('#carouselUpdates').carousel('next');
-});
+  // Update View All buttons - hide all, show selected
+  var viewAllButtons = document.querySelectorAll('.quick-overview-view-all .btn');
+  viewAllButtons.forEach(function(btn) {
+    btn.classList.add('d-none');
+  });
+  var activeViewAll = document.getElementById('quick-overview-viewall-' + contentType);
+  if (activeViewAll) {
+    activeViewAll.classList.remove('d-none');
+  }
+}
 
-$('#carouselFeaturedUpdates .carousel-control-prev').click(function() {
-  $('#carouselFeaturedUpdates').carousel('prev');
-});
+function buildQuickOverviewTiles(listData) {
+  var contentTypes = ['connector', 'solutionpack', 'widget', 'ai_agent'];
+  contentTypes.forEach(function(contentType) {
+    var container = document.getElementById('quick-overview-' + contentType);
+    if (container && container.children.length === 0) {
+      var filteredItems = _.filter(listData, function(item) {
+        return item.type === contentType;
+      }).slice(0, 4);
 
-$('#carouselFeaturedUpdates .carousel-control-next').click(function() {
-  $('#carouselFeaturedUpdates').carousel('next');
-});
+      filteredItems.forEach(function(item) {
+        var tile = buildQuickOverviewTile(item, contentType);
+        container.appendChild(tile);
+      });
+    }
+  });
+}
 
+function buildQuickOverviewTile(item, contentType) {
+  // Use buildCardHtml with 'quick-overview' mode for uniform tile building
+  item.type = contentType;
+  return buildCardHtml(item, 'quick-overview');
+}

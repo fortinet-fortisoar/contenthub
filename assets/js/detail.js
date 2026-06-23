@@ -1,7 +1,7 @@
 'use strict';
 
-  var yumRepo = 'https://repo.fortisoar.fortinet.com';
-  var basePath = 'https://fortisoar.contenthub.fortinet.com/';
+  var yumRepo = 'https://repo.secops-content.forticloud.com';
+  var basePath = 'https://fortinet-fortisoar.github.io/contenthub-dev';
 
   init();
 
@@ -36,8 +36,8 @@
       var iconElement = document.createElement('i');
       iconElement.className = "d-inline-block fs-5 icon-" + detailInfo.type + "-type";
       var contentTypeElement = document.createElement('h6');
-      contentTypeElement.className = "d-inline-block fw-light mx-2 text-light text-uppercase align-top";
-      var contentTypeElementText = document.createTextNode(detailInfo.type === 'solutionpack' ? 'Solution Pack' : detailInfo.type === 'howtos' ? 'How To\'s' : detailInfo.type);
+      contentTypeElement.className = "d-inline-block fw-light mx-2 theme-text text-uppercase align-top";
+      var contentTypeElementText = document.createTextNode(detailInfo.type === 'solutionpack' ? 'Solution Pack' : detailInfo.type === 'howtos' ? 'How To\'s' : detailInfo.type === 'ai_agent' ? 'AI Agent' : detailInfo.type);
       contentTypeElement.append(contentTypeElementText);
       var contentTypeContainer = document.createElement('div');
       contentTypeContainer.append(iconElement);
@@ -64,8 +64,11 @@
       }
       
       document.getElementById("detail-heading").innerHTML = detailInfo.display;
-      document.getElementById("detail-publisher").innerHTML = "Publisher: " + detailInfo.publisher;
-      document.getElementById("detail-certified").innerHTML = "Certified: " + (detailInfo.certified ? "Yes" : "No");
+      document.getElementById("detail-publisher").innerHTML = detailInfo.publisher;
+      document.getElementById("detail-certified").innerHTML = (detailInfo.certified ? "Yes" : "No");
+      if (detailInfo.certified) {
+        document.getElementById("detail-certified").classList.add("text-success");
+      }
 
       var imageElement;
       if (detailInfo.iconLarge) {
@@ -106,7 +109,7 @@
         contentsTab.classList.add("d-none");
 
         var operationTable = document.createElement('table');
-        operationTable.className = "table text-light";
+        operationTable.className = "table theme-text";
         var operationHeaderRow = document.createElement('tr');
         operationHeaderRow.className = "border";
         var operationHeading1 = document.createElement('th');
@@ -155,8 +158,14 @@
       var docLink = detailInfo.help;
 
       httpGetAsync(depsPath, function(response) {
-        if(response){
+        if(response && response.dependentSolutionPacks && response.dependentSolutionPacks.length > 0){
+          // Show dependencies container
           document.getElementById("detail-deps-container").classList.remove("d-none");
+          document.querySelector(".deps-container").classList.remove("d-none");
+          // Keep main content at col-md-8
+          document.getElementById("detail-main-content").classList.remove("col-md-12");
+          document.getElementById("detail-main-content").classList.add("col-md-8");
+
           var dependentSolutionPacks = createNewDomElement('div', 'row');
           if(response.dependentSolutionPacks.length > 3){
             $('#show-all-deps').removeClass('d-none');
@@ -170,6 +179,11 @@
             });
           });
           document.getElementById("detail-deps").append(dependentSolutionPacks);
+        } else {
+          // Hide dependencies container and expand main content
+          document.querySelector(".deps-container").classList.add("d-none");
+          document.getElementById("detail-main-content").classList.remove("col-md-8");
+          document.getElementById("detail-main-content").classList.add("col-md-12");
         }
       });
 
@@ -230,6 +244,7 @@
         contentsTabContent.append(contentRow);
       }
 
+      // var docLink = 'https://github.com/fortinet-fortisoar/solution-pack-phishing-email-response/blob/1.0.1-doc-changes/README.md';
       var docLinkBlock = document.getElementById("doc-content-block");
       if(docLink && docLink.match(/readme.md/gi)){
         docLink = getGitRawDocLink(docLink);
@@ -242,6 +257,7 @@
           var baseGitDocLink = docLink.replace(/readme.md/gi, "");
           detailReadMeResponse = detailReadMeResponse.replaceAll("./docs/res", baseGitDocLink + '/docs/res');
           detailReadMeResponse = detailReadMeResponse.replaceAll("./", baseDocLink);
+
           document.getElementById("detail-docs-content").innerHTML = marked.parse(detailReadMeResponse);
           $('.item-github-content').removeClass('d-none');
           docLinkBlock.classList.add("d-block");
@@ -269,7 +285,7 @@
       if(detailInfo.scm.type === 'public'){
         var githubLink = document.createElement('a');
         githubLink.href = detailInfo.scm.url;
-        githubLink.className = "detail-github-link text-light text-decoration-none";
+        githubLink.className = "detail-github-link theme-text text-decoration-none";
         githubLink.setAttribute("title", "Github Repo");
         githubLink.setAttribute("target", "_blank");
         githubLink.setAttribute("rel", "noopener noreferrer");
@@ -329,9 +345,18 @@
   }
 
   function httpGetAsync(theUrl, callback){
-    http.onreadystatechange = function() { 
-      if (http.readyState == 4 && http.status == 200) {
-        callback(JSON.parse(http.responseText));
+    http.onreadystatechange = function() {
+      if (http.readyState == 4) {
+        if (http.status == 200) {
+          try {
+            callback(JSON.parse(http.responseText));
+          } catch (e) {
+            callback(null);
+          }
+        } else {
+          // Handle 404 or other errors gracefully - treat as no data
+          callback(null);
+        }
       }
     }
     http.open("GET", theUrl, true);
@@ -358,7 +383,7 @@
 
   function createDepsCard(listItem){
     var itemDiv = createNewDomElement('div', 'col-md-12');
-    var aTaglistItem = createNewDomElement('a', 'text-light mp-tile-container mp-tile-' + listItem.type + '-container text-decoration-none');
+    var aTaglistItem = createNewDomElement('a', 'theme-text mp-tile-container mp-tile-' + listItem.type + '-container text-decoration-none');
     var entityName = encodeURIComponent(listItem.name);
     aTaglistItem.href = basePath + "/detail.html?entity=" + entityName + "&version=" + listItem.version + "&type=" + listItem.type;
     aTaglistItem.setAttribute("title", listItem.label);
@@ -383,7 +408,7 @@
     var itemDetailsDiv = createNewDomElement('div', 'mp-tile-details');
 
     var itemVersion = createNewDomElement('p', 'm-0 d-inline-block');
-    var itemVersionTag = document.createElement('span');
+    var itemVersionTag = createNewDomElement('span', 'muted');
     var itemVersionTagText = document.createTextNode("Version: ");
     itemVersionTag.appendChild(itemVersionTagText);
     itemVersion.appendChild(itemVersionTag);
@@ -397,7 +422,7 @@
     itemDetailsDiv.appendChild(verticalSeparator);
 
     var itemCertified = createNewDomElement('p', 'm-0 d-inline-block');
-    var itemCertifiedTag = document.createElement('span');
+    var itemCertifiedTag = createNewDomElement('span', 'muted');
     var itemCertifiedTagText = document.createTextNode("Certified: ");
     itemCertifiedTag.appendChild(itemCertifiedTagText);
     itemCertified.appendChild(itemCertifiedTag);
