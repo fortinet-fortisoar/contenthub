@@ -148,6 +148,10 @@
 
   /* Announcement heading - Dark theme */
   --announcement-heading-gradient: linear-gradient(90.1deg, #E6CFFF 0.09%, #C5E2FF 75.47%);
+
+  --build-it-yourself-container-bg: #0E1330;
+  --build-it-yourself-container-border: #182A7E;
+  --build-it-yourself-container-gradient: #7214FF;
 }
 
 .light-theme-applied {
@@ -286,6 +290,10 @@
 
   /* Announcement heading - Light theme */
   --announcement-heading-gradient: linear-gradient(89.97deg, #8423F2 0.03%, #38AFF9 82.2%);
+
+  --build-it-yourself-container-bg: #DBE4F6;
+  --build-it-yourself-container-border: #d7d8df;
+  --build-it-yourself-container-gradient: #7214FF;
 }
 
 html, body {
@@ -1377,7 +1385,7 @@ button:focus, a:focus {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   line-height: 20px;
-  margin: 10px 0px 0px 10px;
+  margin: 10px 10px 0px 10px;
   font-weight: 500;
 }
 
@@ -1764,8 +1772,22 @@ footer ul.links li:not(:last-child) a{
   padding: 30px 50px;
   margin: 0px 0px 100px 0px;
   border-radius: 10px;
-  border: 1px solid var(--border-color);
-  background-color: var(--card-bg-color);
+  border: 1px solid var(--build-it-yourself-container-border);
+  background-color: var(--build-it-yourself-container-bg);
+}
+
+.build-it-yourself-container::before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: var(--build-it-yourself-container-gradient);
+  filter: blur(250px);
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .build-it-yourself-container h2 {
@@ -1974,7 +1996,7 @@ footer ul.links li:not(:last-child) a{
 .product-update-image {
   flex: 1 1 100%;
   width: 100%;
-  min-height: 350px;
+  min-height: 410px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -2247,39 +2269,15 @@ footer ul.links li:not(:last-child) a{
   display: block;
   object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
-  opacity: 0.7;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.logoloop__item:hover img {
-  opacity: 1;
-}
-
 /* Sprite icons from Agent_Icons_Spritesheet.png */
-.logoloop__item.notion,
-.logoloop__item.slack,
-.logoloop__item.group_2,
-.logoloop__item.git,
-.logoloop__item.elf,
-.logoloop__item.outlook,
-.logoloop__item.dropbox,
-.logoloop__item.confluence,
-.logoloop__item.atlasion,
-.logoloop__item.ball,
-.logoloop__item.s,
-.logoloop__item.gmail,
-.logoloop__item.asana,
-.logoloop__item.drive,
-.logoloop__item.cloud,
-.logoloop__item.calander,
-.logoloop__item.cisco,
-.logoloop__item.oracle,
-.logoloop__item.linkedin {
+.logoloop__item {
   background: url('../images/Agent_Icons_Spritesheet.png') no-repeat;
   width: 40px;
   height: 40px;
   display: inline-block;
-  opacity: 0.7;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -2302,10 +2300,6 @@ footer ul.links li:not(:last-child) a{
 .logoloop__item.cisco { background-position: -56px -168px; }
 .logoloop__item.oracle { background-position: -112px -168px; }
 .logoloop__item.linkedin { background-position: -168px -168px; }
-
-.logoloop__item:hover {
-  opacity: 1;
-}
 
 /* Reviews Section - Gartner Peer Insights Style */
 #reviews-section > h3 {
@@ -2546,11 +2540,8 @@ footer ul.links li:not(:last-child) a{
   text-align: center;
 }
 
+.content-type-nav .nav-link.active,
 .content-type-nav .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.content-type-nav .nav-link.active {
   background: var(--content-type-nav-bg-active);
   color: #ffffff !important;
 }

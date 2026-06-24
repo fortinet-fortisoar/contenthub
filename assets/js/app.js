@@ -530,7 +530,7 @@ function updateContentOnPageLoad(allItemsJson){
       // Image placeholder (130x130)
       var cardImage = createNewDomElement('div', 'review-card-image');
       var placeholderImg = createNewDomElement('img', '');
-      placeholderImg.src = 'assets/images/icon_large.png';
+      placeholderImg.src = 'banner.imagePath';
       placeholderImg.alt = 'Content thumbnail';
       cardImage.appendChild(placeholderImg);
       card.appendChild(cardImage);
