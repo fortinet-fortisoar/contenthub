@@ -305,7 +305,7 @@
       }
       var tagsContainer = document.getElementById("detail-tags-container");
       var tagsDiv = document.getElementById("detail-tags");
-      var allTags = detailInfo.tags.length > 0 ? detailInfo.tags : detailInfo.recordTags;
+      var allTags = detailInfo.tags && detailInfo.tags.length > 0 ? detailInfo.tags : detailInfo.recordTags;
       if(allTags && allTags.length > 0){
         tagsContainer.classList.remove("d-none");
         _.each(allTags, function(tag){
@@ -314,6 +314,8 @@
           tagCard.append(tagText);
           tagsDiv.append(tagCard);
         });
+      } else {
+        tagsContainer.classList.add("d-none");
       }
     });
   };
