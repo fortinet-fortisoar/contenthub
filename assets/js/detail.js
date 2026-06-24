@@ -243,8 +243,7 @@
         contentRow.append(contentCol);
         contentsTabContent.append(contentRow);
       }
-
-      // var docLink = 'https://github.com/fortinet-fortisoar/solution-pack-phishing-email-response/blob/1.0.1-doc-changes/README.md';
+      
       var docLinkBlock = document.getElementById("doc-content-block");
       if(docLink && docLink.match(/readme.md/gi)){
         docLink = getGitRawDocLink(docLink);
