@@ -3,7 +3,7 @@
 const http = new XMLHttpRequest();
 
 var yumRepo = 'https://repo.secops-content.forticloud.com/';
-var basePath = 'https://fortinet-fortisoar.github.io/contenthub-dev';
+var basePath = 'https://fortisoar.contenthub.fortinet.com/';
 var listItems = [];
 var listItemsBkp;
 var showContentTypeClearFilter = false;
