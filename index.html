@@ -17,7 +17,9 @@
     <!-- CSS only -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/icon_font/style.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
@@ -50,7 +52,7 @@
     <div class="wrapper" id="main-content-wrapper">
         <div class="row">
             <div class="col-md-12">
-                <div class="topbar-container background-color-secondary" id="topbar-container">
+                <div class="topbar-container" id="topbar-container">
                 </div>
             </div>
         </div>
@@ -58,7 +60,7 @@
             <div class="col-md-12">
                 <div class="main main-carousel-container">
                     <div class="page-loading main-loader">
-                        <div class="center background-color-primary">
+                        <div class="center">
                             <div class="wave"></div>
                             <div class="wave"></div>
                             <div class="wave"></div>
@@ -73,108 +75,193 @@
                     </div>
                     <div class="main-page-content d-none">
                         <div class="main-banner-container">
-                            <div id="product-announcement-slider" class="d-none">
-                                <div id="carouselAnnoucements" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-inner" id="carousel-announcement-content"></div>
-                                </div>
+                            <div class="product-announcement-container text-center">
+                                <h2>Everything You Need to</h2>
+                                <h2>Streamline Security Operations</h2>
+                                <h5>Build, Deploy, and Scale Security Automation with 700+ Integrations</h5>
                             </div>
                             <div class="global-search-input main-page-search-bar">
-                                <input class="form-control" type="text" id="searchText" name="searchText" placeholder="What do you want to explore today?" onChange="submitSearch(this)" onEnter="submitSearch(this)"/>
-                                <i class="fa fa-search searchIcon"></i>
-                            </div>
-                            <div class="main-page-search-bar-content-type">
-                                <div class="alert alert-warning custom-search-alert fade" role="alert">
-                                    Minimum 3 characters are required for search.
-                                    <button type="button" class="bg-transparent border-0 btn close shadow-none text-danger" data-dismiss="alert"
-                                        onclick="dismissSearchAlertBox()" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                <input class="form-control search-text-form" type="text" id="searchText" name="searchText"
+                                    placeholder="Search connectors, agents, widgets, solution packs..." onChange="submitSearch(this)"
+                                    onEnter="submitSearch(this)" />
+                                    <button class="btn custom-btn-xs default-btn-bg searchIcon">
+                                        <i class="fa fa-arrow-right"></i>
                                     </button>
+                                <div class="main-page-search-bar-content-type">
+                                    <div class="alert alert-warning custom-search-alert fade" role="alert">
+                                        Minimum 3 characters are required for search.
+                                        <button type="button"
+                                            class="bg-transparent border-0 btn close shadow-none text-danger"
+                                            data-dismiss="alert" onclick="dismissSearchAlertBox()" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="logo-loop-section text-center" data-logo-loop>
+                                <h3 class="logo-loop-title theme-text mb-4">Connect your agents to your favourite apps
+                                </h3>
+                                <div class="logoloop logo-loop-container logoloop--horizontal" role="region"
+                                    aria-label="Partner logos">
+                                    <div class="logoloop__track">
+                                        <div class="logoloop__list" role="list">
+                                            <div class="logoloop__item notion"></div>
+                                            <div class="logoloop__item slack"></div>
+                                            <div class="logoloop__item group_2"></div>
+                                            <div class="logoloop__item git"></div>
+                                            <div class="logoloop__item elf"></div>
+                                            <div class="logoloop__item outlook"></div>
+                                            <div class="logoloop__item dropbox"></div>
+                                            <div class="logoloop__item confluence"></div>
+                                            <div class="logoloop__item atlasion"></div>
+                                            <div class="logoloop__item ball"></div>
+                                            <div class="logoloop__item s"></div>
+                                            <div class="logoloop__item gmail"></div>
+                                            <div class="logoloop__item asana"></div>
+                                            <div class="logoloop__item drive"></div>
+                                            <div class="logoloop__item cloud"></div>
+                                            <div class="logoloop__item calander"></div>
+                                            <div class="logoloop__item cisco"></div>
+                                            <div class="logoloop__item oracle"></div>
+                                            <div class="logoloop__item linkedin"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <main class="content m-0">
                             <div class="container">
-                                <div class="position-relative">
-                                    <div id="carouselMain" class="carousel slide main-carousel-content" data-bs-ride="carousel">
-                                        <div class="carousel-indicators" id="main-carousel-indicators"></div>
-                                        <div class="carousel-inner" id="main-carousel-content"></div>
+                                <div id="how-tos-container" class="mt-5">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h3 class="mb-4 text-center">Featured How To's Videos</h3>
+                                            <div class="how-tos-content position-relative mb-5">
+                                                <iframe
+                                                    src="https://www.youtube-nocookie.com/embed/videoseries?list=PLDA69vHJcNaER-HZWT3pNQ3E7BjUDNm8j&controls=0&rel=0&fs=0&disablekb=1&modestbranding=1"
+                                                    title="YouTube video player" frameborder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen></iframe>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="content-list-quick-overview mt-5">
+                                    <div class="content-list-quick-overview-title text-center">
+                                        <h3 class="mb-4">Find Solution Packs | in Seconds</h3>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <nav class="content-type-nav" role="tablist">
+                                            <a href="#" id="quick-overview-tab-solutionpack" class="nav-link theme-text active" role="tab" data-content-type="solutionpack">
+                                                Solution Packs
+                                            </a>
+                                            <a href="#" id="quick-overview-tab-connector" class="nav-link theme-text" role="tab" data-content-type="connector">
+                                                Connectors
+                                            </a>
+                                            <a href="#" id="quick-overview-tab-widget" class="nav-link theme-text" role="tab" data-content-type="widget">
+                                                Widgets
+                                            </a>
+                                            <a href="#" id="quick-overview-tab-ai_agent" class="nav-link theme-text" role="tab" data-content-type="ai_agent">
+                                                Agents
+                                            </a>
+                                        </nav>
+                                        <div class="quick-overview-tab-content">
+                                            <div class="quick-overview-tiles-wrapper">
+                                                <div class="quick-overview-tiles d-none" id="quick-overview-connector"></div>
+                                                <div class="quick-overview-tiles" id="quick-overview-solutionpack"></div>
+                                                <div class="quick-overview-tiles d-none" id="quick-overview-widget"></div>
+                                                <div class="quick-overview-tiles d-none" id="quick-overview-ai_agent"></div>
+                                            </div>
+                                            <div class="quick-overview-view-all">
+                                                <a href="list.html?contentType=connector" class="btn d-none default-btn-bg" id="quick-overview-viewall-connector">View All</a>
+                                                <a href="list.html?contentType=solutionpack" class="btn default-btn-bg" id="quick-overview-viewall-solutionpack">View All</a>
+                                                <a href="list.html?contentType=widget" class="btn d-none default-btn-bg" id="quick-overview-viewall-widget">View All</a>
+                                                <a href="list.html?contentType=ai_agent" class="btn d-none default-btn-bg" id="quick-overview-viewall-ai_agent">View All</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="gradient-line-top-left-bottom line-section-1"></div>
+                                <div class="featured-suggestions-container overflow-hidden">
+                                    <div class="featured-suggestions-content position-relative">
+                                        <div class="row">
+                                            <div class="col-auto text-start featured-suggestions-header">
+                                                <h3 class="m-b4 section-title mb-0">Featured Solution
+                                                    Pack </br> Updates</h3>
+                                                <h5 class="m-b4 section-subtitle">Our most-used solution packs,</br> continuously refined with new playbooks,</br> broader coverage, and the latest fixes.</h5>
+                                            </div>
+                                            <div class="col">
+                                                <div id="carouselFeaturedUpdates" class="carousel slide carousel-fade h-100"
+                                                    data-bs-ride="carousel">
+                                                    <div class="carousel-indicators mx-xl-0"
+                                                        id="featured-updates-carousel-indicators"></div>
+                                                    <div class="position-relative">
+                                                        <div id="featured-hub-updates" class="d-flex flex-wrap"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="gradient-line-top-right-bottom line-section-2"></div>
                                 <div class="latest-updates-suggestions-container overflow-hidden">
                                     <div class="latest-updates-suggestions-content position-relative">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h4 class="m-b4 text-light"><em class="fw-light">Featured</em> Solution Pack Updates</h4>
-                                                <div id="carouselFeaturedUpdates" class="carousel slide h-100" data-bs-ride="carousel">
-                                                    <div class="bottom-0 carousel-indicators mx-xl-0" id="featured-updates-carousel-indicators"></div>
-                                                    <div class="position-relative mb-3">
-                                                        <div id="featured-hub-updates" class="row"></div>
-                                                        <a class="carousel-control-prev text-decoration-none justify-content-start" role="button" data-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        </a>
-                                                        <a class="carousel-control-next text-decoration-none justify-content-end" role="button" data-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        </a>
+                                                <h3 class="m-b4 section-title">What's New</h3>
+                                                <h5 class="m-b4 section-subtitle">Newly added across the Hub - connectors, solution packs,</br>agents, and widgets to build with.</h5>
+                                                <div id="carouselUpdates" class="carousel slide h-100"
+                                                    data-bs-ride="carousel">
+                                                    <div class="carousel-indicators mx-xl-0"
+                                                        id="latest-updates-carousel-indicators"></div>
+                                                    <div class="position-relative">
+                                                        <div id="latest-hub-updates" class="d-flex flex-wrap"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="how-tos-container" class="mt-5">
+                                <div class="gradient-line-top-bottom line-section-3"></div>
+                                <div id="reviews-section">
+                                    <h3 class="mb-4 text-center">Customer Reviews</h3>
+                                    <div id="reviews-content" class="row"></div>
+                                </div>
+                                <div class="gradient-line-top-left-bottom line-section-4"></div>
+                                <div id="product-updates-slider">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <h4 class="mb-4 text-light"><em class="fw-light">Featured</em> How To's Videos</h4>
-                                            <div class="how-tos-content position-relative mb-5">
-                                                <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLDA69vHJcNaER-HZWT3pNQ3E7BjUDNm8j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="latest-updates-suggestions-container overflow-hidden mt-5">
-                                    <div class="latest-updates-suggestions-content position-relative">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h4 class="m-b4 text-light"><em class="fw-light">Latest</em> Updates</h4>
-                                                <div id="carouselUpdates" class="carousel slide h-100" data-bs-ride="carousel">
-                                                    <div class="bottom-0 carousel-indicators mx-xl-0" id="latest-updates-carousel-indicators"></div>
-                                                    <div class="position-relative mb-3">
-                                                        <div id="latest-hub-updates" class="row"></div>
-                                                        <a class="carousel-control-prev text-decoration-none justify-content-start" role="button" data-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        </a>
-                                                        <a class="carousel-control-next text-decoration-none justify-content-end" role="button" data-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        </a>
+                                            <h3 class="m-b4 section-title">Product Updates</h3>
+                                            <h5 class="m-b4 section-subtitle">FortiSOAR keeps evolving from Agentic AI </br> to new capabilities that unlock more for your SOC.</h5>
+                                            <div class="product-updates-tabs-container">
+                                                <div class="product-updates-tabs-wrapper">
+                                                    <div class="product-updates-tabs-nav" id="product-updates-tabs-nav" role="tablist"></div>
+                                                    <div class="product-updates-tabs-content-wrapper">
+                                                        <div class="tab-content" id="carousel-product-updates-content"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="product-updates-slider" class="mt-5">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h4 class="m-b4 text-light"><em class="fw-light">Product</em> Updates</h4>
-                                            <div id="carouselProductUpdates" class="carousel slide" data-bs-ride="carousel">
-                                                <div class="bottom-0 carousel-indicators mx-0" id="product-carousel-indicators"></div>
-                                                <div class="carousel-inner" id="carousel-product-updates-content"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="build-it-yourself-container background-color-secondary">
+                                <div class="gradient-line-top-right-bottom-sm line-section-5"></div>
+                                <div class="build-it-yourself-container">
                                     <div class="row">
                                         <div class="col-md-7">
-                                            <h3 class="fw-normal text-light mt-5">Did you find what you exactly want?</h3>
-                                            <h1 class="fst-italic fw-light custom-text-info-color">Build it yourself easily!</h1>
-                                            <h5 class="fw-lighter text-light m-0 mb-1">FortiSOAR has built-in guided wizards
-                                                aimed to help you in quickly building your custom solution pack, integrations,
-                                                widgets etc. </br>from scratch or upon an existing solution as a foundation.
+                                            <h2 class="custom-text-info-color">Did you find what you exactly want?
+                                            </h2>
+                                            <h4 class="custom-text-info-color mb-4">Build it yourself
+                                                easily!</h4>
+                                            <h5 class="fw-lighter theme-text m-0 mb-1">FortiSOAR has built-in guided
+                                                wizards
+                                                aimed to help you in quickly building your custom solution pack,
+                                                integrations,
+                                                widgets etc. </br>from scratch or upon an existing solution as a
+                                                foundation.
                                             </h5>
                                             <br /><a class="btn custom-btn-bg mb-5"
-                                                href="https://github.com/fortinet-fortisoar/how-tos" title="Open Github Page"
-                                                target="_blank">Visit our GitHub page for more details</a>
+                                                href="https://github.com/fortinet-fortisoar/how-tos"
+                                                title="Open Github Page" target="_blank">Visit our GitHub page for more
+                                                details</a>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="build-it-yourself-icon"></div>
@@ -187,7 +274,9 @@
                     <footer>
                         <div class="footer-container" id="footer-container"></div>
                     </footer>
-                    <div class="modal fade" id="videoPopupModal" tabindex="-1" aria-labelledby="videoPopupModalLabel" aria-hidden="true">
+
+                    <div class="modal fade" id="videoPopupModal" tabindex="-1" aria-labelledby="videoPopupModalLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -220,6 +309,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.2/underscore-umd-min.js"></script>
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/logo-loop.js"></script>
 </body>
 
 </html>

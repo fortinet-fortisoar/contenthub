@@ -2,28 +2,32 @@
     <div class="topnavbar-content">
         <a href="/" class="text-decoration-none pull-left" target="_self">
             <span class="topbar-nav-logo pull-left"></span>
-            <h1 class="fw-light mb-0 text-light d-inline-block">Forti<span class="fw-normal">SOAR</span> <span class="fw-light m-xxl-2">Content
+            <h1 class="fw-light mb-0 theme-text d-inline-block">Forti<span class="fw-normal">SOAR</span> <span class="fw-light m-xxl-2">Content
                     Hub</span></h1>
         </a>
         <div class="pull-right topbar-navlinks">
-            <ul class="d-inline-block text-light mb-0">
+            <ul class="d-inline-block theme-text mb-0">
                 <li class="nav-item d-none" id="topbar-home-link" title="Home Page">
-                    <a class="nav-link text-light" aria-current="page" href="/" target="_self"><i class="icon icon-home"></i></a>
+                    <a class="nav-link theme-text" aria-current="page" href="/" target="_self"><i class="icon icon-home"></i></a>
                 </li>
                 <li class="nav-item d-inline-block">
-                    <a class="nav-link text-light header-content-nav-link" href id="solutionpack-header-nav-link" aria-current="page"
+                    <a class="nav-link theme-text header-content-nav-link" href id="solutionpack-header-nav-link" aria-current="page"
                         onclick="applyFilter(this, 'solutionpack', 'contentType', 'header', event)">Solution Packs</a>
                 </li>
                 <li class="nav-item d-inline-block">
-                    <a class="nav-link text-light header-content-nav-link" href id="connector-header-nav-link" aria-current="page"
+                    <a class="nav-link theme-text header-content-nav-link" href id="connector-header-nav-link" aria-current="page"
                         onclick="applyFilter(this, 'connector', 'contentType', 'header', event)">Connectors</a>
                 </li>
                 <li class="nav-item d-inline-block">
-                    <a class="nav-link text-light header-content-nav-link" href id="widget-header-nav-link" aria-current="page"
+                    <a class="nav-link theme-text header-content-nav-link" href id="widget-header-nav-link" aria-current="page"
                         onclick="applyFilter(this, 'widget', 'contentType', 'header', event)">Widgets</a>
                 </li>
+                <li class="nav-item d-inline-block">
+                    <a class="nav-link theme-text header-content-nav-link" href id="agent-header-nav-link" aria-current="page"
+                        onclick="applyFilter(this, 'ai_agent', 'contentType', 'header', event)">Agents</a>
+                </li>
                 <li class="d-inline-block nav-item dropdown">
-                    <a class="dropdown-toggle nav-link text-light" href="#" id="navbarDropdownMenuLink"
+                    <a class="dropdown-toggle nav-link theme-text" href="#" id="navbarDropdownMenuLink"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Resources
                     </a>
@@ -46,14 +50,14 @@
                     </ul>
                 </li>
                 <li class="nav-item d-inline-block">
-                    <a class="nav-link text-light" aria-current="page" href onclick="navigateToContributors(event,this)">Contributors</a>
+                    <a class="nav-link theme-text" aria-current="page" href onclick="navigateToContributors(event,this)">Contributors</a>
                 </li>
             </ul>
             <a href="https://fortisoar.fortinet.com" target="_blank" class="btn custom-btn-xs custom-btn-bg d-inline-block me-4">Join Our Community</a>
             <button type="button"
-                class="btn btn-sm btn-link d-none text-light text-decoration-none me-3 fs-6"><i
+                class="btn btn-sm btn-link d-none theme-text text-decoration-none me-3 fs-6"><i
                     class="icon icon-accessibility"></i></button>
-            <button type="button" id="toggle-theme-btn" class="btn btn-sm btn-link d-inline-block text-light text-decoration-none fs-6 dark-mode-active shadow-none"
+            <button type="button" id="toggle-theme-btn" class="btn btn-sm btn-link d-inline-block theme-text text-decoration-none fs-6 dark-mode-active shadow-none"
             onclick="toggleTheme()" title="Toggle Light Theme"><i
                     class="icon icon-light-mode"></i></button>
         </div>
@@ -61,55 +65,55 @@
     <div class="topnavbar-responsive-content">
         <a href="/" class="text-decoration-none pull-left" target="_self">
             <span class="topbar-nav-logo pull-left"></span>
-            <h1 class="fw-lighter mb-0 text-light d-inline-block">Forti<span class="fw-normal">SOAR</span> <span class="fw-light m-xxl-2">Content
+            <h1 class="fw-lighter mb-0 theme-text d-inline-block">Forti<span class="fw-normal">SOAR</span> <span class="fw-light m-xxl-2">Content
                     Hub</span></h1>
         </a>
-        <a class="mt-2 nav-link p-0 pe-1 pull-right px-3 text-light" href="#" id="navbarResponsiveMenuLink"
+        <a class="mt-2 nav-link p-0 pe-1 pull-right px-3 theme-text" href="#" id="navbarResponsiveMenuLink"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-bars"></i>
         </a>
-        <ul class="dropdown-menu text-light multi-level" role="menu" aria-labelledby="navbarResponsiveMenuLink" id="navbar-responsive-menu">
+        <ul class="dropdown-menu theme-text multi-level" role="menu" aria-labelledby="navbarResponsiveMenuLink" id="navbar-responsive-menu">
             <li class="nav-item d-none" id="topbar-home-link">
-                <a class="nav-link text-light header-content-nav-link" aria-current="page" href="/" target="_self"><i class="icon icon-home"></i></a>
+                <a class="nav-link theme-text header-content-nav-link" aria-current="page" href="/" target="_self"><i class="icon icon-home"></i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light header-content-nav-link" aria-current="page"
+                <a class="nav-link theme-text header-content-nav-link" aria-current="page"
                     onclick="applyFilter(this, 'solutionpack', 'contentType')">Solution Packs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light header-content-nav-link" aria-current="page"
+                <a class="nav-link theme-text header-content-nav-link" aria-current="page"
                     onclick="applyFilter(this, 'connector', 'contentType')">Connectors</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light header-content-nav-link" aria-current="page"
+                <a class="nav-link theme-text header-content-nav-link" aria-current="page"
                     onclick="applyFilter(this, 'widget', 'contentType')">Widgets</a>
             </li>
             <li class="nav-item">
-                <a class="dropdown-item nav-link text-light" tabindex="-1" onclick="toggleSubmenu(event)" id="navbarDropdownSubMenuLink"
+                <a class="dropdown-item nav-link theme-text" tabindex="-1" onclick="toggleSubmenu(event)" id="navbarDropdownSubMenuLink"
                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Resources
                 </a>
-                <ul class="dropdown-menu text-light" id="navbarDropdownSubMenu" aria-labelledby="navbarDropdownSubMenuLink">
+                <ul class="dropdown-menu theme-text" id="navbarDropdownSubMenu" aria-labelledby="navbarDropdownSubMenuLink">
                     <li class="dropdown-item">
-                        <a class="nav-link text-light" href id="datasheet-header-nav-link" aria-current="page"
+                        <a class="nav-link theme-text" href id="datasheet-header-nav-link" aria-current="page"
                         onclick="updateSubContentTypeParams('datasheet', this, 'header', event)">FortiSOAR Kit</a>
                     </li>
                     <li class="dropdown-item">
-                        <a class="nav-link text-light" href id="demos-header-nav-link" aria-current="page"
+                        <a class="nav-link theme-text" href id="demos-header-nav-link" aria-current="page"
                         onclick="updateSubContentTypeParams('demovideos', this, 'header', event)">Demo Videos</a>
                     </li>
                     <li class="dropdown-item">
-                        <a class="nav-link text-light" href id="howtos-header-nav-link" aria-current="page"
+                        <a class="nav-link theme-text" href id="howtos-header-nav-link" aria-current="page"
                         onclick="updateSubContentTypeParams('howtos', this, 'header', event)">Product How To's</a>
                     </li>
                 </ul>
             </li>
             <li class="nav-item d-inline-block">
-                <a class="nav-link text-light" aria-current="page" href onclick="navigateToContributors(event,this)">Contributors</a>
+                <a class="nav-link theme-text" aria-current="page" href onclick="navigateToContributors(event,this)">Contributors</a>
             </li>
-            <li class="nav-item"><a class="nav-link text-light" target="_blank" href="https://fortisoar.fortinet.com">Join Our Community</a></li>
+            <li class="nav-item"><a class="nav-link theme-text" target="_blank" href="https://fortisoar.fortinet.com">Join Our Community</a></li>
         </ul>
-        <button type="button" id="toggle-theme-btn" class="btn btn-link btn-sm d-inline-block dark-mode-active fs-6 me-1 mt-2 p-0 pull-right text-decoration-none text-light shadow-none"
+        <button type="button" id="toggle-theme-btn" class="btn btn-link btn-sm d-inline-block dark-mode-active fs-6 me-1 mt-2 p-0 pull-right text-decoration-none theme-text shadow-none"
         onclick="toggleTheme()" title="Toggle Light Theme"><i
                 class="icon icon-light-mode"></i></button>
     </div>

@@ -16,7 +16,7 @@
     <!-- CSS only -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/icon_font/style.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
@@ -55,10 +55,10 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-54P2HBP" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <div class="wrapper" id="main-content-wrapper">
+    <div class="wrapper detail-wrapper" id="main-content-wrapper">
         <div class="row">
             <div class="col-md-12">
-                <div class="topbar-container background-color-secondary" id="topbar-container"></div>
+                <div class="topbar-container" id="topbar-container"></div>
                 <div class="top-breadcrumb d-none background-color-primary">
                     <div class="custom-left-offset-1 custom-right-offset-1 mt-1">
                         <nav aria-label="breadcrumb">
@@ -82,7 +82,7 @@
             <div class="row">
                 <div class="main col-md-12 item-detail-column">
                     <div class="page-loading details-loader">
-                        <div class="center background-color-primary">
+                        <div class="center">
                             <div class="wave"></div>
                             <div class="wave"></div>
                             <div class="wave"></div>
@@ -95,28 +95,38 @@
                             <div class="wave"></div>
                         </div>
                     </div>
-                    <div class="item-detail-content d-none text-light">
+                    <div class="item-detail-content d-none detail-text">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="detail-page-banner-content" id="detail-page-banner-content">
-                                    <div class="detail-page-banner-bg mb-5"></div>
-                                    <div class="detail-page-textual-content">
-                                        <div id="detail-github-link"></div>
-                                        <div id="detail-content-type"></div>
-                                        <h2 id="detail-heading" class="fs-4 mt-2 text-light mb-3"></h2>
-                                        <div class="d-flex">
-                                            <div id="detail-image" class="mp-tile-image-container pull-left"></div>
-                                            <div class="pull-left mx-3 detail-preview-content">
-                                                <div id="detail-certified" class="font-size-sm text-light"></div>
-                                                <div id="detail-publisher" class="font-size-sm mt-2 text-light"></div>
+                                    <div class="detail-page-content">
+                                        <div id="detail-image" class="mp-tile-image-container pull-left"></div>
+                                        <div class="detail-page-textual-content">
+                                            <div id="detail-github-link"></div>
+                                            <div id="detail-content-type"></div>
+                                            <h2 id="detail-heading" class="mt-2 mb-3"></h2>
+                                            <div class="d-flex detail-preview-content">
+                                                <div class="font-size-sm detail-text">
+                                                    <span class="muted">Certified: </span>
+                                                    <span id="detail-certified"></span>
+                                                </div>
+                                                <div class="font-size-sm mt-2 detail-text">
+                                                    <span class="muted">Publisher: </span>
+                                                    <span id="detail-publisher"></span>
+                                                </div>
                                                 <div class="dropdown show dropdown-version-content pull-left mt-1">
-                                                    <a class="btn btn-sm dropdown-toggle p-0 text-light" role="button"
+                                                    <a class="btn btn-sm dropdown-toggle p-0 detail-text" role="button"
                                                         id="dropdownVersionLink" data-bs-toggle="dropdown" aria-haspopup="true"
                                                         aria-expanded="false"></a>
                                                     <div class="dropdown-menu d-none" aria-labelledby="dropdownVersionLink"
                                                         id="detail-available-versions">
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="align-items-center d-flex mt-3" id="detail-tags-container">
+                                                <h5 class="fw-light m-0">Tags:</h5>
+                                                <div class="detail-text detail-properties mb-0"
+                                                    id="detail-tags"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -141,8 +151,8 @@
                         <div class="col-md-12">
                             <div class="detail-content">
                                 <div class="detail-container">
-                                    <div class="row mt-5">
-                                        <div class="col-md-8 col-sm-12">
+                                    <div class="row mt-4">
+                                        <div class="col-md-8 col-sm-12" id="detail-main-content">
                                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link active" id="overview-tab" data-bs-toggle="tab"
@@ -167,7 +177,7 @@
                                                         <div class="row detail-container-bottom">
                                                             <div class="col-md-12">
                                                                 <h5 class="d-block mt-3 fw-light">Description</h5>
-                                                                <div class="text-light detail-properties detail-description"
+                                                                <div class="detail-text detail-properties detail-description"
                                                                     id="detail-description"></div>
                                                             </div>
                                                         </div>
@@ -176,21 +186,21 @@
                                                                 <div class="col-md-12">
                                                                     <h5 class="d-block mt-3 fw-light">Release
                                                                         Notes</h5>
-                                                                    <div class="text-light detail-properties detail-description"
+                                                                    <div class="detail-text detail-properties detail-description"
                                                                         id="detail-release-notes"></div>
                                                                 </div>
                                                             </div>
                                                             <div class="row detail-container-bottom d-none mb-5" id="doc-content-block">
                                                                 <div class="col-md-12">
                                                                     <h5 class="d-block mt-3 fw-light mb-4">Documents</h5>
-                                                                    <div class="text-light detail-properties detail-description pb-5 markdown-body"
+                                                                    <div class="detail-text detail-properties detail-description pb-5 markdown-body"
                                                                         id="detail-docs-content"></div>
                                                                 </div>
                                                             </div>
                                                             <div class="row detail-container-bottom d-none mb-5" id="detail-doc-link">
                                                                 <div class="col-md-12">
                                                                     <h5 class="d-block mt-3 fw-light">Documentation</h5>
-                                                                    <p class="text-light detail-properties detail-description pb-5">View the
+                                                                    <p class="detail-text detail-properties detail-description pb-5">View the
                                                                         document
                                                                         <span id="detail-doc-link-here"></span>
                                                                     </p>
@@ -208,21 +218,16 @@
                                                 <div class="tab-pane fade d-none" id="contents" role="tabpanel"
                                                     aria-labelledby="contents-tab">
                                                     <div class="content-box-styling">
-                                                        <div id="contents-tab-content" class="mt-4 markdown-body text-light"></div>
+                                                        <div id="contents-tab-content" class="mt-4 markdown-body detail-text"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-12 tags-deps-container">
-                                            <div class="detailed-right-container d-none pb-1 mb-4" id="detail-tags-container">
-                                                <h5 class="fw-light">Tags:</h5>
-                                                <div class="text-light detail-properties detail-description"
-                                                    id="detail-tags"></div>
-                                            </div>
+                                        <div class="col-md-4 col-sm-12 deps-container d-none">
                                             <div class="detailed-right-container d-none pb-1" id="detail-deps-container">
                                                 <h5 class="fw-light d-inline-block">Dependent Solution Packs</h5>
                                                 <button class="btn btn-secondary btn-sm pull-right d-none" onclick="showAllDeps()" id="show-all-deps">See All</button>
-                                                <div class="text-light detail-properties detail-description"
+                                                <div class="detail-text detail-properties detail-description"
                                                     id="detail-deps"></div>
                                             </div>
                                         </div>

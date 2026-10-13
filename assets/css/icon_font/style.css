@@ -71,6 +71,15 @@
 .icon-report-border:before {
   content: "\e90e";
 }
+.icon-ai_agent-type:before {
+  content: "\e91f";
+}
+.icon-ai_agent:before {
+  content: "\e92a";
+}
+.icon-ai_agent-border:before {
+  content: "\e92b";
+}
 .icon-solutionpack-type:before {
   content: "\e90f";
 }

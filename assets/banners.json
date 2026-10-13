@@ -1,9 +1,19 @@
-{"mainBanner": [{
+{"mainBanner": [
+  {
+    "heading": "Gartner Peer Insights Reviews",
+    "subHeading": "Many enterprise customers realize the power & effectiveness of FortiSOAR & have provided positive feedback on Gartner Peer Insights.",
+    "description": "",
+    "hyperLink": "https://www.gartner.com/reviews/market/security-orchestration-automation-and-response-solutions/vendor/fortinet/product/fortisoar",
+    "imagePath": "assets/images/gartner-review-icon.png",
+    "hyperLinkText": "View Reviews",
+    "backgroundColorType": "dark"
+  },
+  {
     "heading": "Discover Curated Solutions",
     "subHeading": "FortiSOAR Content Hub is a collection of solution extensions that help you to derive more meaning from your FortiSOAR application",
     "description": "",
     "hyperLink": "/list.html?contentType=all",
-    "imagePath": "",
+    "imagePath": "assets/images/review-icon.png",
     "hyperLinkText": "Explore Content Hub",
     "backgroundColorType": "dark"
   },
@@ -12,7 +22,7 @@
     "subHeading": "A well-researched and community vetted solution pack to streamline and accelerate your SOAR journey.",
     "description": "",
     "hyperLink": "/detail.html?entity=sOARFramework&version=1.0.0&type=solutionpack",
-    "imagePath": "",
+    "imagePath": "assets/images/review-icon.png",
     "hyperLinkText": "Explore SOAR Framework Pack",
     "backgroundColorType": "dark"
   },
@@ -21,49 +31,40 @@
     "subHeading": "Allows you to imbibe and adapt to threat intel management workflows and best practices and build a threat intel fused incident investigation",
     "description": "",
     "hyperLink": "/detail.html?entity=threat-intel-management&version=1.0.0&type=solutionpack",
-    "imagePath": "",
+    "imagePath": "assets/images/review-icon.png",
     "hyperLinkText": "Explore Threat Intel Management Pack",
-    "backgroundColorType": "dark"
-  },
-  {
-    "heading": "Gartner Peer Insights Reviews",
-    "subHeading": "Many enterprise customers realize the power & effectiveness of FortiSOAR & have provided positive feedback on Gartner Peer Insights.",
-    "description": "",
-    "hyperLink": "https://www.gartner.com/reviews/market/security-orchestration-automation-and-response-solutions/vendor/fortinet/product/fortisoar",
-    "imagePath": "",
-    "hyperLinkText": "View Reviews",
     "backgroundColorType": "dark"
   }],
 "updatesBanner": [{
-    "heading": "FortiSOAR v7.4.3: Introducing Fortinet Advisor for AI-Enhanced Security Orchestration",
-    "subHeading": "Artificial Intelligence",
-    "description": "FortiSOAR has unveiled its latest release, version 7.4.3, featuring groundbreaking innovations aimed at enhancing user experience and efficiency. One notable introduction is the Fortinet Advisor, currently in its preview version, serving as an AI assistant tailored for FortiSOAR users and compatible with version 7.4.3 and later.",
-    "hyperLink": "https://community.fortinet.com/t5/FortiSOAR-Announcements/FortiSOAR-v7-4-3-Introducing-Fortinet-Advisor-for-AI-Enhanced/ta-p/289240",
-    "imagePath": "assets/images/product_updates_01.png",
+    "heading": "Agentic AI Feature Support",
+    "subHeading": "",
+    "description": "FortiSOAR 8.0.0 introduces support for Agentic AI, an AI-driven framework that performs hypothesis-based investigations through multi-step planning, reasoning...",
+    "hyperLink": "https://docs.fortinet.com/document/fortisoar/8.0.0/release-notes/269885/new-features-and-enhancements#Enhanced_Upgrade_Framework",
+    "imagePath": "assets/images/product_updates_1.png",
     "hyperLinkText": ""
   },
   {
-    "heading": "FortiSOAR Outbreak Response Framework Overview",
-    "subHeading": "Zero Day Exploit",
-    "description": "A new FortiGuard Outbreak Detection Service is now available through FortiSOAR™'s Outbreak Response Framework Solution Pack.",
-    "hyperLink": "https://community.fortinet.com/t5/FortiSOAR-Discussions/FortiSOAR-Outbreak-Response-Framework-Overview/td-p/285701",
-    "imagePath": "assets/images/product_updates_02.png",
+    "heading": "FortiSOAR User Interface Enhancements (DeepSea)",
+    "subHeading": "",
+    "description": "Redesigned Login page with a cleaner layout and refreshed colors, providing a more modern and streamlined appearance. Improved spacing, clearer labels...",
+    "hyperLink": "https://docs.fortinet.com/document/fortisoar/8.0.0/release-notes/269885/new-features-and-enhancements#Enhanced_Upgrade_Framework",
+    "imagePath": "assets/images/product_updates_2.png",
     "hyperLinkText": ""
   },
   {
-    "heading": "FortiSOAR Rapid Development Kit v2.0.0 Release Announcement",
-    "subHeading": "Facilitating Community Submission",
-    "description": "We are delighted to introduce FortiSOAR Rapid Development Kit (RDK) Version 2.0.0, bringing a myriad of user-centric enhancements to empower your journey in creating seamless third-party integrations and utility code snippets for FortiSOAR.",
-    "hyperLink": "https://community.fortinet.com/t5/FortiSOAR-Discussions/FortiSOAR-Rapid-Development-Kit-v2-0-0-Release-Announcement/td-p/291179",
-    "imagePath": "assets/images/product_updates_03.png",
+    "heading": "Threat Intelligence Management Enhancements",
+    "subHeading": "",
+    "description": "Added a new Cybersecurity News tab featuring daily advisories, threat intelligence reports, and vulnerability disclosures curated by FortiGuard Labs...",
+    "hyperLink": "https://docs.fortinet.com/document/fortisoar/8.0.0/release-notes/269885/new-features-and-enhancements#Enhanced_Upgrade_Framework",
+    "imagePath": "assets/images/product_updates_3.png",
     "hyperLinkText": ""
   },
   {
-    "heading": "GDPR Article 33 Notification with FortiSOAR GDPR Framework Solution Pack",
-    "subHeading": "Compliance",
-    "description": "The GDPR Framework solution pack serves as a valuable resource for organizations striving to comply with the General Data Protection Regulation (GDPR) guidelines.",
-    "hyperLink": "https://community.fortinet.com/t5/FortiSOAR-Discussions/GDPR-Article-33-Notification-with-FortiSOAR-GDPR-Framework/td-p/275728",
-    "imagePath": "assets/images/product_updates_04.png",
+    "heading": "Enhanced Upgrade Framework",
+    "subHeading": "",
+    "description": "Added a new Cybersecurity News tab featuring daily advisories, threat intelligence reports, and vulnerability disclosures curated by FortiGuard Labs...",
+    "hyperLink": "https://docs.fortinet.com/document/fortisoar/8.0.0/release-notes/269885/new-features-and-enhancements#Enhanced_Upgrade_Framework",
+    "imagePath": "assets/images/product_updates_4.png",
     "hyperLinkText": ""
   }],
  "announcementBanner": [{
