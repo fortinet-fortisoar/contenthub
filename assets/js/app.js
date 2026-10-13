@@ -506,7 +506,7 @@ function updateContentOnPageLoad(allItemsJson){
     }
   });
   totalItems = allItemsJson.length;
-  listItems = allItemsJson;
+  listItems = _.filter(allItemsJson, function (item) { return item.type !== 'mcp_server'; });
   listItemsBkp = listItems;
   if (window.location.href.indexOf('list.html') === -1 && window.location.href.indexOf('detail.html') === -1) {
     setTimeout(function () {
